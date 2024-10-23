@@ -1,0 +1,9 @@
+.vscode/
+*
+!./*.*
+!*.cpp
+!*.h
+!*.png
+!.gitignore
+!makefile
+!README.md
