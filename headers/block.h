@@ -3,6 +3,8 @@
 
 #include "../hash/hash.h"
 #include <random>
+#include <ctime>
+
 using namespace std;
 
 class User {
@@ -60,6 +62,52 @@ public:
     string getSender() const {return sender;};
     string getReceiver() const {return receiver;};
     double getAmount() const {return amount;};
+
+    void print();
+};
+
+class Block {
+private:
+    string hash;
+    string previousHash;
+    time_t timestamp;
+    string version;
+    string merkleHash;
+    int nonce = 0;
+    int difficulty = 0;
+    bool mined = false;
+    vector<Transaction> transactions;
+
+public:
+    Block() {};
+
+    Block(string previousHash, time_t timeStamp, string version, int difficulty, vector<Transaction> transactions){
+        this->previousHash = previousHash;
+        this->timestamp = timeStamp;
+        this->version = version;
+        this->difficulty = difficulty;
+        this->transactions = transactions;
+    }
+
+    void setHash(string hash) {this->hash = hash;};
+    void setPreviousHash(string previousHash) {this->previousHash = previousHash;};
+    void setTimestamp(time_t timestamp) {this->timestamp = timestamp;};
+    void setVersion(string version) {this->version = version;};
+    void setMerkleHash(string merkleHash) {this->merkleHash = merkleHash;};
+    void setNonce(int nonce) {this->nonce = nonce;};
+    void setDifficulty(int difficulty) {this->difficulty = difficulty;};
+    void setMined(bool mined) {this->mined = mined;};
+    void setTransactions(vector<Transaction> transactions) {this->transactions = transactions;};
+
+    string getHash() const {return hash;};
+    string getPreviousHash() const {return previousHash;};
+    time_t getTimestamp() const {return timestamp;};
+    string getVersion() const {return version;};
+    string getMerkleHash() const {return merkleHash;};
+    int getNonce() const {return nonce;};
+    int getDifficulty() const {return difficulty;};
+    bool getMined() const {return mined;};
+    vector<Transaction> getTransactions() const {return transactions;};
 
     void print();
 };

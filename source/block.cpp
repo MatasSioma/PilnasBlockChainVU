@@ -24,6 +24,23 @@ void Transaction::print() {
     cout << endl;
 }
 
+void Block::print() {
+    cout << "Hash'as: " << this->hash << endl;
+    cout << "Praeito hash'as: " << this->previousHash << endl;
+    cout << "Data: " << this->timestamp << endl;
+    cout << "Versija: " << this->version << endl;
+    cout << "Merkle hash'as: " << this->merkleHash << endl;
+    cout << "Nonce: " << this->nonce << endl;
+    cout << "Sudėtingumas: " << this->difficulty << endl;
+    cout << "Iškastas: ";
+    if(this->mined) cout << "Taip";
+    else cout << "Ne";
+    cout << endl;
+    cout << "Transakcijų kiekis: " << this->transactions.size() << endl;
+    cout << "Paskutinė transacija" << this->transactions.end()->getTransactionID() << endl;
+    cout << endl;
+}
+
 string generateRandomString(int length) {
     // const std::string characters = "abcdefghijklmnopqrstuvwxyz";
     const std::string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNOPRSTUVWXYZ";
