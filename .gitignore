@@ -7,3 +7,6 @@
 !.gitignore
 !makefile
 !README.md
+!hash/
+!headers/
+!source/
