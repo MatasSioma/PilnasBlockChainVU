@@ -41,6 +41,22 @@ void Block::print() {
     cout << endl;
 }
 
+// printTxs(2) - dvi pirmos, printTxs(-3) - trys paskutinės
+void Block::printTxs(int amount) {
+    int totalTxs = this->transactions.size();
+    if (abs(amount) > totalTxs) {
+        cout << "Norimas transakcijų išspausdinimo kiekis viršija viso bloko transkacijų kiekį." << endl;
+        return;
+    }
+
+    int start = 0;
+    if(amount < 0) start = totalTxs + amount;
+    for(int i = start; i < start + abs(amount); i++) {
+        this->transactions.at(i).print();
+    }
+    cout << "Dar likę (nerodoma): " << totalTxs - abs(amount) << " transakcijų" << endl;
+}
+
 string Block::calcMerkleHash(vector<Transaction> &txs) {
     string hashInput = "";
     for(auto tx : txs) {

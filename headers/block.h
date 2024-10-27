@@ -129,6 +129,7 @@ public:
     vector<Transaction> getTransactions() const {return transactions;};
 
     void print();
+    void printTxs(int amount);
     string calcMerkleHash(vector<Transaction> &txs);
 };
 
