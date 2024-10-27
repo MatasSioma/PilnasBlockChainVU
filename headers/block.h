@@ -79,14 +79,33 @@ private:
     vector<Transaction> transactions;
 
 public:
-    Block() {};
+    //Genesis
+    Block(vector<User> &users) : hash("0"), previousHash(""), version("1.0"), nonce(0), difficulty(0), mined(1) {
+        time_t timestamp;
+        this->timestamp = time(&timestamp);
 
-    Block(string previousHash, time_t timeStamp, string version, int difficulty, vector<Transaction> transactions){
+        vector<Transaction> newAcc(users.size());
+        for (size_t i = 0; i < users.size(); i++) {
+            User user = users.at(i);
+            Transaction start("0", user.getPublicKey(), user.getBalance());
+            newAcc.at(i) = start;
+        }
+
+        this->transactions = newAcc;
+        this->merkleHash = calcMerkleHash(newAcc);
+        
+    };
+
+    Block(string previousHash, string version, int difficulty, vector<Transaction> transactions){
         this->previousHash = previousHash;
-        this->timestamp = timeStamp;
         this->version = version;
         this->difficulty = difficulty;
         this->transactions = transactions;
+
+        time_t timestamp;
+        this->timestamp = time(&timestamp);
+
+        this->merkleHash = calcMerkleHash(transactions);
     }
 
     void setHash(string hash) {this->hash = hash;};
@@ -110,10 +129,15 @@ public:
     vector<Transaction> getTransactions() const {return transactions;};
 
     void print();
+    string calcMerkleHash(vector<Transaction> &txs);
 };
+
+bool checkIfTxValid(Transaction &tx, vector<User> &users);
 
 string generateRandomString(int length);
 double generateRandomDouble(double low, double high);
 int generateRandomInt(int low, int high);
+vector<User> generateUsers(int userCount);
+vector<Transaction> generateTxs(vector<User> &users, int transactionCount);
 
 #endif
