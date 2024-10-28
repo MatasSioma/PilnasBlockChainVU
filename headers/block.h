@@ -2,6 +2,7 @@
 #define BLOCK_H
 
 #include "../hash/hash.h"
+#include "../headers/timer.h"
 #include <random>
 #include <ctime>
 
@@ -73,7 +74,7 @@ private:
     time_t timestamp;
     string version;
     string merkleHash;
-    int nonce = 0;
+    long nonce = 0;
     int difficulty = 0;
     bool mined = false;
     vector<Transaction> transactions;
@@ -113,7 +114,7 @@ public:
     void setTimestamp(time_t timestamp) {this->timestamp = timestamp;};
     void setVersion(string version) {this->version = version;};
     void setMerkleHash(string merkleHash) {this->merkleHash = merkleHash;};
-    void setNonce(int nonce) {this->nonce = nonce;};
+    void setNonce(long nonce) {this->nonce = nonce;};
     void setDifficulty(int difficulty) {this->difficulty = difficulty;};
     void setMined(bool mined) {this->mined = mined;};
     void setTransactions(vector<Transaction> transactions) {this->transactions = transactions;};
@@ -123,14 +124,17 @@ public:
     time_t getTimestamp() const {return timestamp;};
     string getVersion() const {return version;};
     string getMerkleHash() const {return merkleHash;};
-    int getNonce() const {return nonce;};
+    long getNonce() const {return nonce;};
     int getDifficulty() const {return difficulty;};
     bool getMined() const {return mined;};
     vector<Transaction> getTransactions() const {return transactions;};
 
     void print();
     void printTxs(int amount);
+
+    string getBlockString();
     string calcMerkleHash(vector<Transaction> &txs);
+    long mine(long start = 0, int maxTime = INT32_MAX);
 };
 
 bool checkIfTxValid(Transaction &tx, vector<User> &users);

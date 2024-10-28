@@ -3,7 +3,7 @@
 using namespace std;
 
 #define USER_NR 1'0
-#define TX_NR 10'000
+#define TX_NR 10'0
 
 int main() {
     vector<User> users = generateUsers(USER_NR);
@@ -12,5 +12,10 @@ int main() {
 
     cout << endl;
     Block genesis(users);
-    genesis.printTxs(-2);
+    
+    Block next("0", "1.0", 3, txs);
+    next.print();
+    cout << "Kasamas blokas..." << endl;
+    next.mine();
+    next.print();
 }

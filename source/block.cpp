@@ -67,6 +67,40 @@ string Block::calcMerkleHash(vector<Transaction> &txs) {
     return bitsetToHexStr(hashStr(hashInput, ""));
 }
 
+string Block::getBlockString() {
+    string output = "";
+    output = output + this->previousHash + ctime(&this->timestamp) + this->version + this->merkleHash + to_string(this->difficulty);
+    for(auto tx : this->transactions) {
+        output += tx.getTransactionID();
+    }
+
+    return output;
+}
+
+long Block::mine(long start, int maxTime) {
+    long nonce = start;
+    string target = "";
+    for(int i = 0; i < this->difficulty; i++) target += '0';
+    string block = this->getBlockString();
+    string hash;
+
+    Timer search;
+    while(true) {
+        string blockAndNonce = block + to_string(nonce);
+        hash = bitsetToHexStr(hashStr(blockAndNonce, ""));
+        // cout << nonce << ": "<< hash << endl;
+        if (hash.substr(0, this->difficulty) == target) break;
+        nonce++;
+        if(search.elapsed() > maxTime) return nonce;
+    }
+
+    cout << "Blokas iškastas su nonce: " << nonce << endl;
+    this->setHash(hash);
+    this->setNonce(nonce);
+    this->setMined(true);
+    return -1;
+}
+
 bool checkIfTxValid(Transaction &tx, vector<User> &users) {
     for (auto user : users) {
         if(user.getPublicKey() == tx.getSender() && user.getBalance() >= tx.getAmount()) {
