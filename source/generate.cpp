@@ -17,21 +17,26 @@ int main() {
 
     for(int i = 0; i < BLOCK_NR; i++) {
         vector<Transaction> txs = generateTxs(users, 10000);
-        vector<Transaction> rTx(TX_IN_BLOCK);
+        vector<Transaction> rTx;
+        rTx.reserve(TX_IN_BLOCK);
         cout << "Atsitiktinai parenkamos 100." << endl;
-        for(int tx = 0; tx < TX_IN_BLOCK * 1.1; tx++) {
-            try {
-                int index = generateRandomInt(0, 10000);
-                if(txs.at(index).doTx(users)) {
-                    rTx.at(tx) = txs.at(index);
-                }
-            } catch (std::out_of_range e) {
-                cout << "100 transakcijų pasiekta." << endl;
-                break;
+
+        std::vector<int> indices(10000);
+        std::iota(indices.begin(), indices.end(), 0);
+        std::random_device rd;
+        std::mt19937 g(rd());
+        std::shuffle(indices.begin(), indices.end(), g);
+
+        for(int tx = 0; tx < TX_IN_BLOCK*1.2; tx++) {
+            int index = indices[tx];
+            if(txs.at(index).doTx(users)) {
+                rTx.push_back(txs.at(index));
             }
         }
         rTx.shrink_to_fit();
         Block next(prevHash, "1.0", DIFFICULTY, rTx);
+        cout << "Paskutinė transakcija:" << endl;
+        next.printTxs(1);
         cout << "Kasamas blokas..." << endl;
         next.mine();
         cout << endl;

@@ -37,7 +37,7 @@ void Block::print() {
     else cout << "Ne";
     cout << endl;
     cout << "Transakcijų kiekis: " << this->transactions.size() << endl;
-    cout << "Paskutinės transacijos ID: " << (this->transactions.end()-1)->getTransactionID() << endl;
+    cout << "Paskutinės transakcijos ID: " << (this->transactions.end()-1)->getTransactionID() << endl;
     cout << endl;
 }
 
@@ -124,7 +124,6 @@ bool Transaction::doTx(vector<User> &users) {
     return false;
 }
 
-
 string generateRandomString(int length) {
     // const std::string characters = "abcdefghijklmnopqrstuvwxyz";
     const std::string characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHJKLMNOPRSTUVWXYZ";
@@ -173,20 +172,24 @@ vector<User> generateUsers(int userCount) {
 }
 
 vector<Transaction> generateTxs(vector<User> &users, int transactionCount) {
-    vector<Transaction> txs(transactionCount);
-    for (auto it = txs.begin(); it != txs.end(); it++) {
-        while (true) {
-            User sender = users.at(generateRandomInt(0, users.size()));
-            User receiver = users.at(generateRandomInt(0, users.size()));
-            if (sender.getPublicKey() == receiver.getPublicKey()) continue;
-            double amount = generateRandomDouble(0.10, sender.getBalance());
-            Transaction newTx(sender.getPublicKey(), receiver.getPublicKey(), amount); 
-            *it = newTx;
-            break;
+    vector<Transaction> txs;
+    txs.reserve(transactionCount);
+    for (int i = 0; i < transactionCount; i++) {
+        User sender, receiver;
+        do {
+            sender = users.at(generateRandomInt(0, users.size() - 1));
+            receiver = users.at(generateRandomInt(0, users.size() - 1));
+        } while (sender.getPublicKey() == receiver.getPublicKey());
+
+        // Generate transaction amount and add transaction to the list
+        double amount = generateRandomDouble(0.10, sender.getBalance());
+        if (!sender.getPublicKey().empty() && !receiver.getPublicKey().empty() && amount > 0) {
+            Transaction newTx(sender.getPublicKey(), receiver.getPublicKey(), amount);
+            txs.push_back(newTx);
         }
     }
 
-    cout << "Sugeneruota " << transactionCount << " transakcijų." << endl;
+    cout << "Sugeneruota " << txs.size() << " transakcijų." << endl;
     // cout << transactionCount << "-tos duomenys:\n" << endl;
     // (txs.end()-1)->print();
 
