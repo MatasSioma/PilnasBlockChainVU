@@ -102,20 +102,28 @@ long Block::mine(long start, int maxTime) {
 }
 
 bool Transaction::doTx(vector<User> &users) {
-    for (auto sender : users) {
-        if(sender.getPublicKey() == this->sender) {
-            if(sender.getBalance() < this->amount) break;
-            for(auto recipient : users) {
-                if(recipient.getPublicKey() == this->receiver) {
-                    recipient.setBalance(recipient.getBalance() + this->amount);
-                    sender.setBalance(sender.getBalance() - this->amount);
-                    return true;
-                }
-            }
+    User *senderPtr = nullptr;
+    User *recipientPtr = nullptr;
+
+    for (auto &user : users) {
+        if (user.getPublicKey() == this->sender) {
+            senderPtr = &user;
+        } else if (user.getPublicKey() == this->receiver) {
+            recipientPtr = &user;
         }
+        
+        if (senderPtr && recipientPtr) break;
     }
+
+    if (senderPtr && recipientPtr && senderPtr->getBalance() >= this->amount) {
+        senderPtr->setBalance(senderPtr->getBalance() - this->amount);
+        recipientPtr->setBalance(recipientPtr->getBalance() + this->amount);
+        return true;
+    }
+
     return false;
 }
+
 
 string generateRandomString(int length) {
     // const std::string characters = "abcdefghijklmnopqrstuvwxyz";
@@ -197,4 +205,25 @@ void printBlockChain(list<Block> &chain) {
         cout << endl;
         i++;
     }
+}
+
+void saveUsersToFile(vector<User> &users, string fname) {
+    ofstream data(fname + ".txt");
+    
+    data << left << setw(5) << "#" 
+        << setw(7) << "Vardas" 
+        << setw(12) << "Balansas" 
+        << setw(30) << "PK" << endl;
+
+
+    data << string(88, '-') << endl;
+
+    for (int i = 0; i < users.size(); i++) {
+        data << left << setw(5) << i
+            << setw(7) << users[i].getName()
+            << setw(12) << fixed << setprecision(2) << users[i].getBalance()
+            << setw(30) << users[i].getPublicKey() << endl;
+    }
+
+    data.close();
 }

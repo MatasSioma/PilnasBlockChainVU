@@ -9,8 +9,8 @@ using namespace std;
 
 int main() {
     vector<User> users = generateUsers(USER_NR);
+    saveUsersToFile(users, "usersStart");
     list<Block> blockChain;
-
     Block genesis(users);
     blockChain.push_back(genesis);
     string prevHash = "0";
@@ -40,4 +40,5 @@ int main() {
     }
 
     printBlockChain(blockChain);
+    saveUsersToFile(users, "usersEnd");
 }
