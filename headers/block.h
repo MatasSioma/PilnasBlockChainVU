@@ -3,6 +3,7 @@
 
 #include "../hash/hash.h"
 #include "../headers/timer.h"
+#include <list>
 #include <random>
 #include <ctime>
 
@@ -64,6 +65,7 @@ public:
     string getReceiver() const {return receiver;};
     double getAmount() const {return amount;};
 
+    bool doTx(vector<User> &users);
     void print();
 };
 
@@ -81,7 +83,7 @@ private:
 
 public:
     //Genesis
-    Block(vector<User> &users) : hash("0"), previousHash(""), version("1.0"), nonce(0), difficulty(0), mined(1) {
+    Block(vector<User> users) : hash("0"), previousHash(""), version("1.0"), nonce(0), difficulty(0), mined(1) {
         time_t timestamp;
         this->timestamp = time(&timestamp);
 
@@ -137,12 +139,12 @@ public:
     long mine(long start = 0, int maxTime = INT32_MAX);
 };
 
-bool checkIfTxValid(Transaction &tx, vector<User> &users);
-
 string generateRandomString(int length);
 double generateRandomDouble(double low, double high);
 int generateRandomInt(int low, int high);
 vector<User> generateUsers(int userCount);
 vector<Transaction> generateTxs(vector<User> &users, int transactionCount);
+
+void printBlockChain(list<Block> &chain);
 
 #endif

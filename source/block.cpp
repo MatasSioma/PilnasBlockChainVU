@@ -94,17 +94,24 @@ long Block::mine(long start, int maxTime) {
         if(search.elapsed() > maxTime) return nonce;
     }
 
-    cout << "Blokas iškastas su nonce: " << nonce << endl;
+    cout << "Blokas iškastas per " << search.elapsed() << "s." << endl;
     this->setHash(hash);
     this->setNonce(nonce);
     this->setMined(true);
     return -1;
 }
 
-bool checkIfTxValid(Transaction &tx, vector<User> &users) {
-    for (auto user : users) {
-        if(user.getPublicKey() == tx.getSender() && user.getBalance() >= tx.getAmount()) {
-            return true;
+bool Transaction::doTx(vector<User> &users) {
+    for (auto sender : users) {
+        if(sender.getPublicKey() == this->sender) {
+            if(sender.getBalance() < this->amount) break;
+            for(auto recipient : users) {
+                if(recipient.getPublicKey() == this->receiver) {
+                    recipient.setBalance(recipient.getBalance() + this->amount);
+                    sender.setBalance(sender.getBalance() - this->amount);
+                    return true;
+                }
+            }
         }
     }
     return false;
@@ -151,8 +158,8 @@ vector<User> generateUsers(int userCount) {
     }
 
     cout << "Sugeneruota " << userCount << " vartotojų." << endl;
-    cout << userCount << "-tojo duomenys:\n" << endl;
-    (users.end()-1)->print();
+    // cout << userCount << "-tojo duomenys:\n" << endl;
+    // (users.end()-1)->print();
 
     return users;
 }
@@ -172,8 +179,22 @@ vector<Transaction> generateTxs(vector<User> &users, int transactionCount) {
     }
 
     cout << "Sugeneruota " << transactionCount << " transakcijų." << endl;
-    cout << transactionCount << "-tos duomenys:\n" << endl;
-    (txs.end()-1)->print();
+    // cout << transactionCount << "-tos duomenys:\n" << endl;
+    // (txs.end()-1)->print();
 
     return txs;
+}
+
+void printBlockChain(list<Block> &chain) {
+    int i = 0;
+    cout << endl << "Galutinė sugeneruota blokų grandinė: \n" << endl;
+    for(auto block : chain) {
+        cout << i << " Blokas:" << endl;
+        cout << "hash: " << block.getHash() << endl;
+        cout << "praito hash: " << block.getPreviousHash() << endl;
+        cout << "txs: " << block.getTransactions().size() << " - " << block.getMerkleHash() << endl;
+        cout << "nonce: " << block.getNonce() << endl;
+        cout << endl;
+        i++;
+    }
 }
