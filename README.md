@@ -38,7 +38,8 @@ Transaction(string sender, string receiver, double amount);
     geteriai, seteriai
     ...
 */
-bool doTx(vector<User> &users); // turint naudotojų masyvą, bando ivykdyti transakciją. Jei randamas gavėjas, siuntėjas ir siuntėjas turi pakankamai balanso, "transakcija įvygdoma" ir funckicija gražina true. Visais kitai atvėjais - false.
+bool doTx(vector<User> &users); // turint naudotojų masyvą, bando ivykdyti transakciją.
+//Jei randamas gavėjas, siuntėjas ir siuntėjas turi pakankamai balanso, "transakcija įvygdoma" ir funckicija gražina - true. Visais kitai atvėjais - false.
 void print(); // Atspauzdina transakcijos informaciją
 
 ```
@@ -49,7 +50,7 @@ void print(); // Atspauzdina transakcijos informaciją
 
 ```cpp
 string hash;
-string previousHash; // praito has
+string previousHash; // Praito hash
 time_t timestamp;
 string version;
 string merkleHash;
@@ -63,12 +64,13 @@ Konstruktoriai, metodai:
 
 ```cpp
 Block(vector<User> users); // Skirtas sukurti pradinį ("genesis") bloką, kuris jau "iškastas" ir pan.
-Block(string previousHash, string version, int difficulty, vector<Transaction> transactions); // Kurti bloką su 
+Block(string previousHash, string version, int difficulty, vector<Transaction> transactions); // Skirta kurti sekantį bloką grandinėje 
 /*
     geteriai, seteriai
     ...
 */
-long mine(long start = 0, int maxTime = INT32_MAX); // Nuo 'start' parametro iteruoja nonce iki kol hash reiškmė turi nustatytą bloko 'difficulty' - 0 kiekį pradžioje. maxTime nusako maksimalų laiką iki kada funkcija gali "kasti"...
+long mine(long start = 0, int maxTime = INT32_MAX); // Nuo 'start' parametro iteruoja nonce iki kol hash reiškmė turi nustatytą bloko 'difficulty' - 0 kiekį pradžioje.
+// maxTime nusako maksimalų laiką iki kada funkcija gali "kasti"...
 string getBlockString(); // Pagalbinis metodas leidžiatis visą bloko informaciją paversiti į string tipą, kad galima būtų hash'uoti
 string calcMerkleHash(vector<Transaction> &txs); // Suskaičiuoja sudėtinį transakcijų ID reiškmių hash'a
 void print(); // atspauzdina visą bloko informaciją
