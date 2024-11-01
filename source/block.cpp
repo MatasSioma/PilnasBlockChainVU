@@ -41,9 +41,17 @@ void Block::print() {
     cout << endl;
 }
 
-// printTxs(2) - dvi pirmos, printTxs(-3) - trys paskutinės
+// printTxs(2) - dvi pirmos, printTxs(-3) - trys paskutinės, printTxs(0) - visos
 void Block::printTxs(int amount) {
     int totalTxs = this->transactions.size();
+
+    if(amount == 0) {
+        for(auto tx : this->transactions) {
+            tx.print();
+        }
+        return;
+    }
+
     if (abs(amount) > totalTxs) {
         cout << "Norimas transakcijų išspausdinimo kiekis viršija viso bloko transkacijų kiekį." << endl;
         return;
@@ -208,6 +216,18 @@ void printBlockChain(list<Block> &chain) {
         cout << endl;
         i++;
     }
+}
+
+void printBlockInChain(list<Block> &chain, int index) {
+    index = abs(index);
+    if(index >= chain.size()) {
+        cout << "Indeksas " << index << " blokų grandinėje neegzistuoja." << endl;
+        return;
+    }
+    cout << index + 1 << "-asis blokas grandinėje:" << endl;
+    list<Block>::iterator block = chain.begin();
+    advance(block, index);
+    block->print();
 }
 
 void saveUsersToFile(vector<User> &users, string fname) {

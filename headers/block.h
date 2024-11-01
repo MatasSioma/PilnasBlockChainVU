@@ -147,5 +147,6 @@ vector<Transaction> generateTxs(vector<User> &users, int transactionCount);
 
 void saveUsersToFile(vector<User> &users, string fname);
 void printBlockChain(list<Block> &chain);
+void printBlockInChain(list<Block> &chain, int index);
 
 #endif
