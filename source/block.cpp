@@ -214,16 +214,16 @@ void saveUsersToFile(vector<User> &users, string fname) {
     ofstream data(fname + ".txt");
     
     data << left << setw(5) << "#" 
-        << setw(7) << "Vardas" 
+        << setw(9) << "Vardas" 
         << setw(12) << "Balansas" 
         << setw(30) << "PK" << endl;
 
 
-    data << string(88, '-') << endl;
+    data << string(90, '-') << endl;
 
     for (int i = 0; i < users.size(); i++) {
         data << left << setw(5) << i
-            << setw(7) << users[i].getName()
+            << setw(9) << users[i].getName()
             << setw(12) << fixed << setprecision(2) << users[i].getBalance()
             << setw(30) << users[i].getPublicKey() << endl;
     }
