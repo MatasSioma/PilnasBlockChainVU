@@ -87,7 +87,8 @@ int generateRandomInt(int low, int high);
 
 //Generavimas:
 vector<User> generateUsers(int userCount); //Naudoja default konstruktorių sugeneruoti 'userCount' skaičių vartotojų
-vector<Transaction> generateTxs(vector<User> &users, int transactionCount); // Generuoja transakcijas pagal pateiktą vartotojų masyvą. Generuoja tokias kad suntėjas ir gavėjas nesutampa, o transakcijos kiekis neviršija išrinkto siuntėjo balanso.
+vector<Transaction> generateTxs(vector<User> &users, int transactionCount); // Generuoja transakcijas pagal pateiktą vartotojų masyvą.
+//Generuoja tokias kad suntėjas ir gavėjas nesutampa, o transakcijos kiekis neviršija išrinkto siuntėjo balanso.
 
 // Išvestis:
 void saveUsersToFile(vector<User> &users, string fname); // Išsaugo vartotojus į teksitinį <fname>.txt failą
