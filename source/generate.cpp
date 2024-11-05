@@ -4,8 +4,8 @@ using namespace std;
 
 #define USER_NR 1000
 #define TX_IN_BLOCK 100
-#define BLOCK_NR 3
-#define DIFFICULTY 4
+#define BLOCK_NR 2
+#define DIFFICULTY 3
 
 int main() {
     vector<User> users = generateUsers(USER_NR);

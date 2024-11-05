@@ -3,6 +3,7 @@
 
 #include "../hash/hash.h"
 #include "../headers/timer.h"
+#include "../headers/merkle.h"
 #include <list>
 #include <random>
 #include <ctime>

@@ -66,13 +66,19 @@ void Block::printTxs(int amount) {
 }
 
 string Block::calcMerkleHash(vector<Transaction> &txs) {
-    string hashInput = "";
-    for(auto tx : txs) {
-        hashInput += tx.getSender();
-        hashInput += tx.getReceiver();
-        hashInput += tx.getAmount();
+    std::vector<bc::hash_digest> tx_hashes;
+
+    for (auto &tx : txs) {
+        bc::hash_digest tx_hash;
+        bc::decode_hash(tx_hash, tx.getTransactionID());
+        tx_hashes.push_back(tx_hash);
     }
-    return bitsetToHexStr(hashStr(hashInput, ""));
+
+    // Compute the Merkle root
+    auto merkle_root = create_merkle(tx_hashes);
+
+    // Convert the hash_digest to a hex string
+    return bc::encode_base16(merkle_root);
 }
 
 string Block::getBlockString() {
