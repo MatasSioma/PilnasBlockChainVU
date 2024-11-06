@@ -84,9 +84,6 @@ string Block::calcMerkleHash(vector<Transaction> &txs) {
 string Block::getBlockString() {
     string output = "";
     output = output + this->previousHash + ctime(&this->timestamp) + this->version + this->merkleHash + to_string(this->difficulty);
-    for(auto tx : this->transactions) {
-        output += tx.getTransactionID();
-    }
 
     return output;
 }

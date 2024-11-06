@@ -4,8 +4,9 @@ using namespace std;
 
 #define USER_NR 1000
 #define TX_IN_BLOCK 100
-#define BLOCK_NR 2
+#define BLOCK_NR 5
 #define DIFFICULTY 3
+#define BLOCK_OPTION_COUNT 5
 
 int main() {
     vector<User> users = generateUsers(USER_NR);
@@ -17,9 +18,11 @@ int main() {
 
     for(int i = 0; i < BLOCK_NR; i++) {
         vector<Transaction> txs = generateTxs(users, 10000);
-        vector<Transaction> rTx;
-        rTx.reserve(TX_IN_BLOCK);
-        cout << "Atsitiktinai parenkamos 100." << endl;
+
+        vector<vector<User>> accounts;
+        accounts.reserve(BLOCK_OPTION_COUNT); 
+        for(int n = 0; n < BLOCK_OPTION_COUNT; n++)
+            accounts.push_back(users);
 
         std::vector<int> indices(10000);
         std::iota(indices.begin(), indices.end(), 0);
@@ -27,21 +30,55 @@ int main() {
         std::mt19937 g(rd());
         std::shuffle(indices.begin(), indices.end(), g);
 
-        for(int tx = 0; tx < TX_IN_BLOCK*1.15; tx++) {
-            int index = indices[tx];
-            if(txs.at(index).doTx(users)) {
-                rTx.push_back(txs.at(index));
+        vector<Block> blockOptions;
+        blockOptions.reserve(BLOCK_OPTION_COUNT);
+
+        for(int n = 0; n < BLOCK_OPTION_COUNT; n++) {
+            vector<Transaction> rTx;
+            rTx.reserve(TX_IN_BLOCK);
+            cout << n + 1 << " bloko variantui - atsitiktinai parenkamos +-" << TX_IN_BLOCK << endl;
+
+            for(int i = 0; i < TX_IN_BLOCK*1.2+(TX_IN_BLOCK/USER_NR); i++) {
+                int index = indices[i];
+                Transaction tx = txs.at(index);
+                if(tx.doTx(accounts.at(n))) {
+                    rTx.push_back(tx);
+                    //Transakcijos maišos reikšmės tikrinimas
+                    string hashInput = tx.getSender() + tx.getReceiver() + to_string(tx.getAmount());
+                    if(bitsetToHexStr(hashStr(hashInput, "")) != tx.getTransactionID())
+                        cout << "Transackicjos informacijos maišos reikšmė nesutampa su transakcijos ID!" << endl;
+                }
+            }
+
+            rTx.shrink_to_fit();
+            Block next(prevHash, "1.0", DIFFICULTY, rTx);
+            blockOptions.push_back(next);
+        }
+        
+        int n = 0, maxTime = 1;
+        vector<long> lastTry(BLOCK_OPTION_COUNT, 0);
+        while(true) {
+            if(n >= BLOCK_OPTION_COUNT) {
+                n = 0;
+                maxTime *= 2;
+                cout << "\nDidinamas kasimo laikas.\n" << endl;
+                continue;
+            }
+            cout << "Kasamas "<< n + 1 << "-as bloko variantas..." << endl;
+            long res = blockOptions.at(n).mine(lastTry.at(n), maxTime);
+            if(res != -1) {
+                cout << "Blokas neiškastas per " << maxTime << "s" << endl;
+                lastTry.at(n) = res;
+                n++;
+            } else {
+                prevHash = blockOptions.at(n).getHash();
+                blockChain.push_back(blockOptions.at(n));
+                users = accounts.at(n);
+                break;
             }
         }
-        rTx.shrink_to_fit();
-        Block next(prevHash, "1.0", DIFFICULTY, rTx);
-        cout << "Paskutinė transakcija:" << endl;
-        next.printTxs(-1);
-        cout << "Kasamas blokas..." << endl;
-        next.mine();
         cout << endl;
-        prevHash = next.getHash();
-        blockChain.push_back(next);
+
     }
 
     printBlockChain(blockChain);
