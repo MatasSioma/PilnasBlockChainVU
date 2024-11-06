@@ -1,4 +1,5 @@
 # Centralizuota Blokų Grandinė
+#### čia aprašyta v0.1 versija. Pakeitimai padaryti v0.2 yra apačioje (minimalūs).
 
 Pagrindiniai komponentai yra `User` (vartotojas), `Transaction` (transakcija) ir `Block` (blokas). Viskas aprašoma `block.h` faile ir implementuojama `block.cpp` faile.
 
@@ -98,7 +99,7 @@ void printBlockInChain(list<Block> &chain, int index); // Atspauzdina bloką esa
 
 ### Pagrindinė genegravimo funkcija `main()`
 
-Tai yra pavyzdys kaip galima būtų naudoti apibtėžtas klases, jų metodus ir funkcijas.
+Blokų grandinės generavimas, panaudojant viršuje apibrėžtas funkcijas.
 
 1. **Vartotojų generavimas ir išsaugojimas:**
    - Naudojant `generateUsers(USER_NR)`, sugeneruojamas nustatytas kiekis vartotojų.
@@ -122,3 +123,14 @@ Tai yra pavyzdys kaip galima būtų naudoti apibtėžtas klases, jų metodus ir 
 5. **Blokų grandinės ir galutinio vartotojų sąrašo išsaugojimas:**
    - Baigus blokų kūrimo ciklą, visa blokų grandinė išspausdinama naudojant `printBlockChain`.
    - Galutinis vartotojų sąrašas išsaugomas faile „usersEnd“.
+
+### v0.2
+
+Pasiekti reikalavimus šiai versijai reikėjo labai nedaug.
+
+Pakeitimai:
+- calcMerkleHash() naudoja libbitcoin biblioteką per 3-iosios užduoties apraše esančia create_merkle() funkcija.
+- main() sukuria nustatytą kiekį blokų variantų, kuriuos paeiliui bandoma kasti.\
+Vis didinant leidžiama kasimo laiką. jei nei vienas iš varantų nebuvo iškasti.\
+Pirmas iškastas blokas tampa priimtu sekančiu blokų grandinės bloku.
+- Taip pat main() funckcijoje, kuomet parenkami atsitinktinės transackcijos, patikrinama ar sutampa jų maišos ir ID reikšmės.
