@@ -6,18 +6,18 @@ Pagrindiniai komponentai yra `User` (vartotojas), `Transaction` (transakcija) ir
 ## Struktūra
 
 - **User** klasė aprašo vartotoją su viešuoju raktu (angl. *public key*), balansu ir vardu.
-- **Transaction** klasė aprašo transakciją, kurios metu tam tikra suma pervedama iš vieno vartotojo į kitą per viešajį raktą.
+- **Transaction** klasė aprašo transakciją, kurios metu tam tikra suma pervedama iš vieno vartotojo į kitą per viešąjį raktą.
 - **Block** klasė aprašo bloką, kuriame yra transakcijos, ankstesnio bloko hash vertė, sudėtingumo lygis ir kita informacija.
 - **Pagalbinės funkcijos** leidžia generuoti atsitiktinius vartotojus, transakcijas, išvedinėti klasių informaciją ir t.t..
 - **`main()`** Naudoja visus minėtus komponentus ir generuoja, imituoja blokų grandinę.
 
-> Vietose kada naudojamas hashavimas, naudojama mano maišos funckija `hashStr` ir pagalbinė `bitsetToHex`.
+> Vietose kada naudojamas hashavimas, naudojama mano maišos funkcija `hashStr` ir pagalbinė `bitsetToHex`.
 
 ## Komponentai
 
 ### `User` klasė
 
-Ši klasė aprašo vartotojus, jų informaciją: vardą, viešuojąjį raktą ir balansą.
+Ši klasė aprašo vartotojus, jų informaciją: vardą, viešąjį raktą ir balansą.
 
 ```cpp
 User(); //Sukuria vartotoją su random vardu, PK, balansu
@@ -26,7 +26,7 @@ User(string &name, string &publicKey, double &balance);
     geteriai, seteriai
     ...
 */
-void print(); // Atspauzdina varotojo informacija
+void print(); // Atspausdina vartotojo informacija
 ```
 
 ### `Transaction` klasė
@@ -41,7 +41,7 @@ Transaction(string sender, string receiver, double amount);
 */
 bool doTx(vector<User> &users); // turint naudotojų masyvą, bando ivykdyti transakciją.
 //Jei randamas gavėjas, siuntėjas ir siuntėjas turi pakankamai balanso, "transakcija įvygdoma" ir funckicija gražina - true. Visais kitai atvėjais - false.
-void print(); // Atspauzdina transakcijos informaciją
+void print(); // Atspausdina transakcijos informaciją
 
 ```
 
@@ -70,9 +70,9 @@ Block(string previousHash, string version, int difficulty, vector<Transaction> t
     geteriai, seteriai
     ...
 */
-long mine(long start = 0, int maxTime = INT32_MAX); // Nuo 'start' parametro iteruoja nonce iki kol hash reiškmė turi nustatytą bloko 'difficulty' - 0 kiekį pradžioje.
+long mine(long start = 0, int maxTime = INT32_MAX); // Nuo 'start' parametro iteruoja nonce iki kol hash reikšmė turi nustatytą bloko 'difficulty' - 0 kiekį pradžioje.
 // maxTime nusako maksimalų laiką iki kada funkcija gali "kasti"...
-string getBlockString(); // Pagalbinis metodas leidžiatis visą bloko informaciją paversiti į string tipą, kad galima būtų hash'uoti
+string getBlockString(); // Pagalbinis metodas leidžiatis visą bloko informaciją paversti į string tipą, kad galima būtų hash'uoti
 string calcMerkleHash(vector<Transaction> &txs); // Suskaičiuoja sudėtinį transakcijų ID reiškmių hash'a
 void print(); // atspauzdina visą bloko informaciją
 void printTxs(int amount); // printTxs(2) - dvi pirmos transakcijos, printTxs(-3) - trys paskutinės, printTxs(0) - visos, naudojant Transaction::print()
@@ -89,15 +89,15 @@ int generateRandomInt(int low, int high);
 //Generavimas:
 vector<User> generateUsers(int userCount); //Naudoja default konstruktorių sugeneruoti 'userCount' skaičių vartotojų
 vector<Transaction> generateTxs(vector<User> &users, int transactionCount); // Generuoja transakcijas pagal pateiktą vartotojų masyvą.
-//Generuoja tokias kad suntėjas ir gavėjas nesutampa, o transakcijos kiekis neviršija išrinkto siuntėjo balanso.
+//Generuoja tokias kad siuntėjas ir gavėjas nesutampa, o transakcijos kiekis neviršija išrinkto siuntėjo balanso.
 
 // Išvestis:
-void saveUsersToFile(vector<User> &users, string fname); // Išsaugo vartotojus į teksitinį <fname>.txt failą
-void printBlockChain(list<Block> &chain); // Atspauzdina visą blokų grandinę
-void printBlockInChain(list<Block> &chain, int index); // Atspauzdina bloką esantį 'index' vietoje. Rodomas index + 1 - asis blokas grandinėje
+void saveUsersToFile(vector<User> &users, string fname); // Išsaugo vartotojus į tekstinį <fname>.txt failą
+void printBlockChain(list<Block> &chain); // Atspausdina visą blokų grandinę
+void printBlockInChain(list<Block> &chain, int index); // Atspausdina bloką esantį 'index' vietoje. Rodomas index + 1 - asis blokas grandinėje
 ```
 
-### Pagrindinė genegravimo funkcija `main()`
+### Pagrindinė generavimo funkcija `main()`
 
 Blokų grandinės generavimas, panaudojant viršuje apibrėžtas funkcijas.
 
@@ -131,6 +131,6 @@ Pasiekti reikalavimus šiai versijai reikėjo labai nedaug.
 Pakeitimai:
 - calcMerkleHash() naudoja libbitcoin biblioteką per 3-iosios užduoties apraše esančia create_merkle() funkcija.
 - main() sukuria nustatytą kiekį blokų variantų, kuriuos paeiliui bandoma kasti.\
-Vis didinant leidžiama kasimo laiką. jei nei vienas iš varantų nebuvo iškasti.\
+Vis didinant leidžiama kasimo laiką. jei nei vienas iš variantų nebuvo iškasti.\
 Pirmas iškastas blokas tampa priimtu sekančiu blokų grandinės bloku.
-- Taip pat main() funckcijoje, kuomet parenkami atsitinktinės transackcijos, patikrinama ar sutampa jų maišos ir ID reikšmės.
+- Taip pat main() funkcijoje, kuomet parenkami atsitiktinės transakcijos, patikrinama ar sutampa jų maišos ir ID reikšmės.
