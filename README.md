@@ -122,7 +122,7 @@ Blokų grandinės generavimas, panaudojant viršuje apibrėžtas funkcijas.
 
 5. **Blokų grandinės ir galutinio vartotojų sąrašo išsaugojimas:**
    - Baigus blokų kūrimo ciklą, visa blokų grandinė išspausdinama naudojant `printBlockChain`.
-   - išspausdinamas paskutinis blokas - visa jo saugoma informacija bei jo paskunės dvi transakcijos (pridėta v0.2)
+   - išspausdinamas paskutinis blokas - visa jo saugoma informacija bei jo paskutinės dvi transakcijos (pridėta v0.2)
    - Galutinis vartotojų sąrašas išsaugomas faile „usersEnd“.
 
 ### v0.2
