@@ -122,6 +122,7 @@ Blokų grandinės generavimas, panaudojant viršuje apibrėžtas funkcijas.
 
 5. **Blokų grandinės ir galutinio vartotojų sąrašo išsaugojimas:**
    - Baigus blokų kūrimo ciklą, visa blokų grandinė išspausdinama naudojant `printBlockChain`.
+   - išspausdinamas paskutinis blokas - visa jo saugoma informacija bei jo paskunės dvi transakcijos (pridėta v0.2)
    - Galutinis vartotojų sąrašas išsaugomas faile „usersEnd“.
 
 ### v0.2
@@ -131,6 +132,6 @@ Pasiekti reikalavimus šiai versijai reikėjo labai nedaug.
 Pakeitimai:
 - calcMerkleHash() naudoja libbitcoin biblioteką per 3-iosios užduoties apraše esančia create_merkle() funkcija.
 - main() sukuria nustatytą kiekį blokų variantų, kuriuos paeiliui bandoma kasti.\
-Vis didinant leidžiama kasimo laiką. jei nei vienas iš variantų nebuvo iškasti.\
+Vis didinant leidžiama kasimo laiką. jei nei vienas iš variantų nebuvo iškasti. Kitas to pačio bloko kasimo ciklas prasideda nuo paskutinio patikrinto skaičiaus (nonce).
 Pirmas iškastas blokas tampa priimtu sekančiu blokų grandinės bloku.
 - Taip pat main() funkcijoje, kuomet parenkami atsitiktinės transakcijos, patikrinama ar sutampa jų maišos ir ID reikšmės.

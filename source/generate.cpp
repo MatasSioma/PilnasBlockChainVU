@@ -4,7 +4,7 @@ using namespace std;
 
 #define USER_NR 1000
 #define TX_IN_BLOCK 100
-#define BLOCK_NR 5
+#define BLOCK_NR 3
 #define DIFFICULTY 3
 #define BLOCK_OPTION_COUNT 5
 
@@ -83,6 +83,16 @@ int main() {
 
     printBlockChain(blockChain);
     saveUsersToFile(users, "usersEnd");
+
+    cout << "\nPaskutinis blokas detaliai:" << endl;
+    int lastIndex = blockChain.size() - 1 ;
+    printBlockInChain(blockChain, lastIndex);
+
+    list<Block>::iterator block = blockChain.begin();
+    advance(block, lastIndex);
+    cout << "Dvi paskutinės bloko transakcijos:" << endl;
+    block->printTxs(-2);
+
 
     /*
         išvesti n-taji bloką:
